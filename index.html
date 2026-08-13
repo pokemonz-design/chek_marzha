@@ -19,71 +19,54 @@
 
     .checklist-widget {
       width: 757px;
-      height: 430px;
+      height: 520px;
       margin: 0 auto;
       background: #fff;
       border: 1px solid #eee9dd;
       overflow: hidden;
     }
 
-    .topline {
-      height: 54px;
-      padding: 0 28px;
-      display: flex;
-      align-items: center;
-      background: #b69118;
-      color: #fff;
-      font-size: 20px;
-      font-weight: 700;
-    }
-
-    .topline span {
-      margin-left: 10px;
-      color: #171717;
-      font-weight: 400;
-    }
-
     .content {
-      padding: 20px 30px 18px;
-      height: calc(100% - 54px);
+      padding: 24px 30px 20px;
+      height: 100%;
       display: flex;
       flex-direction: column;
     }
 
     .kicker {
-      margin-bottom: 4px;
+      margin-bottom: 5px;
       color: #b69118;
       font-family: Arial, sans-serif;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.7px;
     }
 
     h2 {
-      margin: 0 0 5px;
-      font-size: 28px;
-      line-height: 1.04;
-      letter-spacing: -0.7px;
+      margin: 0 0 7px;
+      font-size: 19px;
+      line-height: 1.1;
+      letter-spacing: -0.25px;
     }
 
     .intro {
-      margin: 0 0 10px;
-      font-size: 13px;
-      line-height: 1.3;
-      max-width: 650px;
+      margin: 0 0 13px;
+      max-width: 670px;
+      font-size: 14px;
+      line-height: 1.35;
     }
 
     .progress-row {
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 12px;
+      gap: 14px;
       align-items: center;
-      margin-bottom: 11px;
+      margin-bottom: 14px;
     }
 
     .progress-track {
-      height: 5px;
+      height: 6px;
       background: #e6e0d3;
       overflow: hidden;
     }
@@ -96,35 +79,38 @@
     }
 
     .progress-text {
-      min-width: 90px;
+      min-width: 92px;
       text-align: right;
       font-family: Arial, sans-serif;
-      font-size: 11px;
+      font-size: 12px;
       color: #666;
     }
 
     .checklist {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 4px 18px;
+      gap: 8px 22px;
       flex: 1;
     }
 
     .item {
       display: flex;
       align-items: flex-start;
-      gap: 8px;
-      padding: 5px 0;
+      gap: 10px;
+      padding: 7px 0;
       border-bottom: 1px solid #eee9dd;
       font-family: Arial, sans-serif;
-      font-size: 11px;
+      font-size: 16px;
       line-height: 1.25;
     }
 
     .item input {
-      margin: 1px 0 0;
+      margin: 2px 0 0;
+      width: 18px;
+      height: 18px;
       accent-color: #b69118;
       cursor: pointer;
+      flex: 0 0 auto;
     }
 
     .item label {
@@ -132,17 +118,18 @@
     }
 
     .footer {
-      margin-top: 10px;
+      margin-top: 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      gap: 18px;
     }
 
     .status {
+      max-width: 390px;
       font-family: Arial, sans-serif;
-      font-size: 11px;
-      line-height: 1.25;
+      font-size: 12px;
+      line-height: 1.3;
       color: #555;
     }
 
@@ -156,16 +143,17 @@
     }
 
     button {
-      height: 32px;
-      padding: 0 14px;
+      height: 34px;
+      padding: 0 15px;
       border: 0;
       cursor: pointer;
       font-family: Arial, sans-serif;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 700;
     }
 
-    .print-btn {
+    .print-btn,
+    .download-btn {
       background: #b69118;
       color: #fff;
     }
@@ -187,25 +175,27 @@
         border: 0;
       }
 
-      .topline {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+      .content {
+        height: auto;
+        padding: 0;
       }
 
       .buttons {
         display: none;
       }
 
-      .content {
-        height: auto;
-      }
-
-      .checklist {
-        gap: 6px 22px;
-      }
-
       .item {
-        font-size: 12px;
+        font-size: 14px;
+      }
+
+      .progress-track {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .progress-bar {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
       }
     }
   </style>
@@ -214,11 +204,6 @@
 <body>
 
 <div class="checklist-widget">
-
-  <div class="topline">
-    Финансовый контроль
-    <span>Чек-лист CFO</span>
-  </div>
 
   <div class="content">
 
@@ -339,8 +324,12 @@
           Сбросить
         </button>
 
+        <button class="download-btn" id="downloadBtn">
+          Скачать
+        </button>
+
         <button class="print-btn" id="printBtn">
-          Распечатать чек-лист
+          Распечатать
         </button>
       </div>
 
@@ -397,6 +386,43 @@
   document.getElementById("printBtn")
     .addEventListener("click", () => {
       window.print();
+    });
+
+  document.getElementById("downloadBtn")
+    .addEventListener("click", () => {
+      const rows = checkboxes.map((item, index) => {
+        const label = document.querySelector(`label[for="${item.id}"]`).innerText.trim();
+        const mark = item.checked ? "ДА" : "НЕТ";
+        return `${index + 1}. [${mark}] ${label}`;
+      });
+
+      const checked = checkboxes.filter(item => item.checked).length;
+
+      const text =
+`ЧЕК-ЛИСТ CFO
+Защищает ли компания маржу при росте продаж
+
+Результат: ${checked} из ${checkboxes.length}
+
+${rows.join("\n")}
+
+Сформировано из интерактивного чек-листа статьи.`;
+
+      const blob = new Blob([text], {
+        type: "text/plain;charset=utf-8"
+      });
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.download = "checklist-cfo-margin.txt";
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(url);
     });
 
   updateProgress();
