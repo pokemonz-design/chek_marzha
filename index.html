@@ -12,30 +12,28 @@
 
     body {
       margin: 0;
-      background: #f4f0f5;              /* фиолетово-серый фон */
+      background: #f4f0f5;
       font-family: Georgia, "Times New Roman", serif;
       color: #111;
     }
 
     .checklist-widget {
       width: 757px;
-      height: 530px;
+      max-width: 100%;
       margin: 0 auto;
       background: #fff;
-      border: 1px solid #ece4ee;        /* светло-фиолетовая граница */
-      overflow: hidden;
+      border: 1px solid #ece4ee;
+      /* Убраны фиксированная высота и overflow: hidden */
     }
 
     .content {
       padding: 25px 30px 20px;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
+      /* Убраны height: 100% и flex-свойства */
     }
 
     .kicker {
       margin-bottom: 4px;
-      color: #874596;                   /* фиолетовый акцент */
+      color: #874596;
       font-family: Arial, sans-serif;
       font-size: 11px;
       font-weight: 700;
@@ -51,20 +49,18 @@
     }
 
     .intro {
-      margin: 0 0 10px;
+      margin: 0 0 12px;
       font-size: 16px;
       line-height: 1.3;
       max-width: 650px;
     }
 
     .checklist {
-      flex: 1;
-      min-height: 0;
-      overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 12px 0;
-      padding-right: 4px;
+      padding-right: 0;
+      /* Убраны flex: 1, min-height, overflow-y: auto */
     }
 
     .item {
@@ -72,7 +68,7 @@
       align-items: center;
       gap: 8px;
       padding: 10px 0;
-      border-bottom: 1px solid #ece4ee; /* светло-фиолетовая граница */
+      border-bottom: 1px solid #ece4ee;
       font-family: Arial, sans-serif;
       font-size: 18px;
       line-height: 1.3;
@@ -80,7 +76,7 @@
 
     .item input {
       margin: 0;
-      accent-color: #874596;           /* фиолетовый чекбокс */
+      accent-color: #874596;
       cursor: pointer;
       transform: scale(1.3);
       transform-origin: center left;
@@ -91,7 +87,7 @@
     }
 
     .footer {
-      margin-top: 10px;
+      margin-top: 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -107,7 +103,7 @@
     }
 
     .status strong {
-      color: #874596;                  /* фиолетовый акцент */
+      color: #874596;
     }
 
     .buttons {
@@ -127,21 +123,22 @@
     }
 
     .print-btn {
-      background: #874596;             /* фиолетовая кнопка */
+      background: #874596;
       color: #fff;
     }
 
     .pdf-btn {
-      background: #874596;             /* фиолетовая кнопка */
+      background: #874596;
       color: #fff;
     }
 
     .reset-btn {
       background: #fff;
       color: #222;
-      border: 1px solid #b78bc0;       /* светло-фиолетовая граница */
+      border: 1px solid #b78bc0;
     }
 
+    /* При печати всё остаётся обычным, ограничений нет */
     @media print {
       body {
         background: #fff;
@@ -149,9 +146,7 @@
 
       .checklist-widget {
         width: 100%;
-        height: auto;
         border: 0;
-        overflow: visible;
       }
 
       .buttons {
@@ -159,20 +154,12 @@
       }
 
       .content {
-        height: auto;
         padding: 10px;
-      }
-
-      .checklist {
-        overflow: visible;
-        flex: none;
-        gap: 6px 0;
       }
 
       .item {
         font-size: 12px;
         padding: 5px 0;
-        transform: none;
       }
 
       .item input {
@@ -190,7 +177,7 @@
 
     <div class="kicker">Проверьте систему контроля</div>
 
-    <h2>Защищает ли компания маржу при росте продаж</h2>
+    <h2>Контролирует ли компания маржу при росте продаж</h2>
 
     <p class="intro">
       Отметьте пункты, которые выполняются в вашей компании. Прогресс покажет, сколько ключевых зон уже закрыто.
@@ -358,22 +345,14 @@
     .addEventListener("click", async () => {
       const element = document.querySelector(".checklist-widget");
       const buttons = document.querySelector(".buttons");
-      const checklist = document.getElementById("checklist");
 
       if (typeof html2pdf === "undefined") {
         alert("Не удалось загрузить библиотеку для PDF. Проверьте интернет-соединение.");
         return;
       }
 
-      const originalButtonDisplay = buttons.style.display;
-      const originalWidgetHeight = element.style.height;
-      const originalWidgetOverflow = element.style.overflow;
-      const originalChecklistOverflow = checklist.style.overflow;
-
+      // Для PDF временно скрываем кнопки, но не трогаем высоту (она и так auto)
       buttons.style.display = "none";
-      element.style.height = "auto";
-      element.style.overflow = "visible";
-      checklist.style.overflow = "visible";
 
       const options = {
         margin: 0,
@@ -398,10 +377,7 @@
         console.error(error);
         alert("Не удалось сохранить PDF.");
       } finally {
-        buttons.style.display = originalButtonDisplay;
-        element.style.height = originalWidgetHeight;
-        element.style.overflow = originalWidgetOverflow;
-        checklist.style.overflow = originalChecklistOverflow;
+        buttons.style.display = "";
       }
     });
 
