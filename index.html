@@ -23,12 +23,10 @@
       margin: 0 auto;
       background: #fff;
       border: 1px solid #ece4ee;
-      /* Убраны фиксированная высота и overflow: hidden */
     }
 
     .content {
       padding: 25px 30px 20px;
-      /* Убраны height: 100% и flex-свойства */
     }
 
     .kicker {
@@ -43,7 +41,7 @@
 
     h2 {
       margin: 0 0 5px;
-      font-size: 28px;
+      font-size: 23.8px; /* было 28px, уменьшено на 15% */
       line-height: 1.04;
       letter-spacing: -0.7px;
     }
@@ -60,18 +58,19 @@
       flex-direction: column;
       gap: 12px 0;
       padding-right: 0;
-      /* Убраны flex: 1, min-height, overflow-y: auto */
     }
 
     .item {
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 10px 0;
+      padding: 8px 0;
       border-bottom: 1px solid #ece4ee;
       font-family: Arial, sans-serif;
-      font-size: 18px;
-      line-height: 1.3;
+      font-size: 17px;        /* как alert-title в первом файле */
+      line-height: 1.15;      /* более собранный межстрочный интервал */
+      font-weight: 700;       /* плотный, собранный вид */
+      letter-spacing: -0.2px;
     }
 
     .item input {
@@ -138,7 +137,6 @@
       border: 1px solid #b78bc0;
     }
 
-    /* При печати всё остаётся обычным, ограничений нет */
     @media print {
       body {
         background: #fff;
@@ -351,7 +349,6 @@
         return;
       }
 
-      // Для PDF временно скрываем кнопки, но не трогаем высоту (она и так auto)
       buttons.style.display = "none";
 
       const options = {
